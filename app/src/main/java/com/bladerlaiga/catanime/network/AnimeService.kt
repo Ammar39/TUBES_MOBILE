@@ -1,5 +1,7 @@
 package com.bladerlaiga.catanime.network
 
+import com.bladerlaiga.catanime.AnimeDetail
+import com.bladerlaiga.catanime.AnimeOverview
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -9,12 +11,12 @@ import retrofit2.http.Path
 
 interface AnimeService {
   @GET("{type}/{id}")
-  suspend fun get(
+  suspend fun getSeason(
     @Path("type") type: String = "anime",
     @Path("id") id: Long
   ): AnimeDetail
   @GET("season/{year}/{season}")
-  suspend fun getAll(
+  suspend fun getOverview(
     @Path("year") year: Int = 2018,
     @Path("season") season: String = "winter"
   ): AnimeOverview

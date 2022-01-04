@@ -40,25 +40,23 @@ object NavigatorMessage {
 }
 
 sealed class Route(var path: String) {
-  object Home : Route("/home")
-  object Edit : Route("/edit") {
-    fun navigate(): Boolean {
-      return navigator.navigate(path)
-    }
-  }
+  object Home : Route("/home") {  }
+  object Edit : Route("/edit") {  }
   object Detail : Route("/detail/{id}") {
     fun navigate(id: Long): Boolean {
       return navigator.navigate("/detail/$id")
     }
   }
   object ComingSoon : Route("/coming-soon")
-  object Favorite : Route("/favorite")
-
+  object Favorite : Route("/favorite") {  }
+  open fun navigate(): Boolean {
+    return navigator.navigate(path)
+  }
+  open fun back(): Boolean {
+    return navigator.back()
+  }
   companion object {
     val navigator = Navigator()
-    fun back(): Boolean {
-      return navigator.back()
-    }
   }
 }
 
@@ -103,6 +101,7 @@ fun NavigatorContent() {
       }
     }
     composable(Route.Favorite.path) {
+      FavoriteContent()
     }
     composable(Route.ComingSoon.path) {
     }

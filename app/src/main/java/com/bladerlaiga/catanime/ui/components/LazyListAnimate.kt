@@ -4,37 +4,52 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 
-private enum class State { PLACING, PLACED }
+enum class ScaleAndAlphaTransitionState { From, To }
 
 data class ScaleAndAlphaArgs(
   val fromScale: Float,
   val toScale: Float,
   val fromAlpha: Float,
-  val toAlpha: Float
+  val toAlpha: Float,
 )
 
 @Composable
-fun scaleAndAlpha(
+fun rememberTransitionScaleAndAlphaState(initial: ScaleAndAlphaTransitionState = ScaleAndAlphaTransitionState.From): MutableTransitionState<ScaleAndAlphaTransitionState> {
+  val state = remember {
+    MutableTransitionState(initialState = initial).apply {
+      if (currentState == ScaleAndAlphaTransitionState.From) {
+        targetState = ScaleAndAlphaTransitionState.To
+      } else {
+        targetState = ScaleAndAlphaTransitionState.From
+      }
+    }
+  }
+  return state
+}
+
+
+@Composable
+fun TransitionScaleAndAlpha(
   args: ScaleAndAlphaArgs,
-  animation: FiniteAnimationSpec<Float>
+  animation: FiniteAnimationSpec<Float>,
+  transitionState: MutableTransitionState<ScaleAndAlphaTransitionState> = rememberTransitionScaleAndAlphaState()
 ): Pair<Float, Float> {
-  val transitionState = remember { MutableTransitionState(State.PLACING).apply { targetState = State.PLACED } }
   val transition = updateTransition(transitionState, label = "")
   val alpha by transition.animateFloat(transitionSpec = { animation }, label = "") { state ->
     when (state) {
-      State.PLACING -> args.fromAlpha
-      State.PLACED -> args.toAlpha
+      ScaleAndAlphaTransitionState.From -> args.fromAlpha
+      ScaleAndAlphaTransitionState.To -> args.toAlpha
     }
   }
   val scale by transition.animateFloat(transitionSpec = { animation }, label = "") { state ->
     when (state) {
-      State.PLACING -> args.fromScale
-      State.PLACED -> args.toScale
+      ScaleAndAlphaTransitionState.From -> args.fromScale
+      ScaleAndAlphaTransitionState.To -> args.toScale
     }
   }
-  return alpha to scale
+  return Pair(alpha, scale)
 }
 
 @Composable

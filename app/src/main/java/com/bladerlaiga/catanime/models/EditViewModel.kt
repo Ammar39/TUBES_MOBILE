@@ -6,14 +6,17 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.bladerlaiga.catanime.database.Anime
+import com.bladerlaiga.catanime.AnimeOverviewItem
+import com.bladerlaiga.catanime.Genre
+import com.bladerlaiga.catanime.Producer
+import com.bladerlaiga.catanime.Theme
 import com.bladerlaiga.catanime.repository.AppRepository
 
 class EditViewModel(
   application: Application
 ) : AndroidViewModel(application) {
   private var repository: AppRepository = AppRepository(application)
-  private val animeDAO = repository.getAnimeDao()
+  private val animeDAO = repository.getAnimeOverviewItem()
 
   var title by mutableStateOf("")
   var image by mutableStateOf("")
@@ -24,7 +27,7 @@ class EditViewModel(
   var aired by mutableStateOf("")
   var premiered by mutableStateOf("")
   var source by mutableStateOf("")
-  var producers by mutableStateOf("")
+  var producer by mutableStateOf("")
   var studios by mutableStateOf("")
   var genre by mutableStateOf("")
   var theme by mutableStateOf("")
@@ -41,7 +44,7 @@ class EditViewModel(
     aired = ""
     premiered = ""
     source = ""
-    producers = ""
+    producer = ""
     studios = ""
     genre = ""
     theme = ""
@@ -50,19 +53,16 @@ class EditViewModel(
   }
   suspend fun save() {
     animeDAO.insert(
-      Anime(
+      AnimeOverviewItem(
         title = title,
         image_url = image,
-        alt_title = alt_name,
         episodes = episode,
-        status = status,
-        airing_start = aired,
+//        airing_start = aired,
         source = source,
-        producers = producers,
-        genres = genre,
-        themes = theme,
-        duration = duration,
-        synopsis = synopsis
+        producers = producer.split(", ").map { Producer(it) },
+        genres = genre.split(", ").map { Genre(it) },
+        themes = theme.split(", ").map { Theme(it) },
+        synopsis = synopsis,
       )
     )
   }

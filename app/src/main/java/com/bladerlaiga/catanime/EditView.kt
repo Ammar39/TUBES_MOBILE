@@ -163,8 +163,8 @@ fun EditContent() {
               )
               Spacer(modifier = Modifier.size(height = 8.dp, width = Dp.Infinity))
               TextField(
-                value = viewModel.producers,
-                onValueChange = { viewModel.producers = it },
+                value = viewModel.producer,
+                onValueChange = { viewModel.producer = it },
                 label = { Text("Producers") },
                 placeholder = { Text("Bandai Visual, Lantis") },
                 modifier = Modifier.fillMaxWidth()

@@ -2,6 +2,7 @@ package com.bladerlaiga.catanime.network
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.bladerlaiga.catanime.AnimeOverviewItem
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -11,7 +12,7 @@ class AnimeSource(
 ) : PagingSource<Int, AnimeOverviewItem>() {
   override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeOverviewItem> {
     return try {
-      val response = service.getAll()
+      val response = service.getOverview()
       val nextKey = if (/*response.item_count == 0*/true) {
         null
       } else {

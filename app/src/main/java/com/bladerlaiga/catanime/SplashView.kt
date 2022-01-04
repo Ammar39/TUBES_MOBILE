@@ -25,9 +25,9 @@ fun SplashContent(onFinish: () -> Unit) {
     val scale = remember {
       Animatable(0f)
     }
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = "splash") {
       scale.animateTo(
-        targetValue = 0.7f,
+        targetValue = 0.2f,
         animationSpec = tween(
           durationMillis = 800,
           easing = {

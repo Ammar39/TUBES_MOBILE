@@ -1,29 +1,48 @@
 package com.bladerlaiga.catanime.repository
 
 import android.app.Application
+import android.content.Context
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.bladerlaiga.catanime.database.AnimeDAO
-import com.bladerlaiga.catanime.database.AppDatabase
-import com.bladerlaiga.catanime.network.AnimeOverviewItem
+import com.bladerlaiga.catanime.AnimeOverviewItem
+import com.bladerlaiga.catanime.database.*
 import com.bladerlaiga.catanime.network.AnimeService
 import com.bladerlaiga.catanime.network.AnimeService.Companion.service
 import com.bladerlaiga.catanime.network.AnimeSource
 import kotlinx.coroutines.flow.Flow
 
-class AppRepository(application: Application) {
-  private var animeDAO: AnimeDAO
+class AppRepository(context: Context) {
+  private var animeDetailDAO: AnimeDetailDAO
+  private var animeOverviewItemDAO: AnimeOverviewItemDAO
+  private var animeFavoriteDAO: AnimeFavoriteDAO
   private var animeService: AnimeService
+  private var animeReminderDAO: AnimeReminderDAO
 
   init {
-    val database = AppDatabase.getInstance(application.applicationContext)
-    animeDAO = database.animeDAO
+    val database = AppDatabase.getInstance(context)
+
+    animeDetailDAO = database.animeDetailDAO
+    animeOverviewItemDAO = database.animeOverviewItemDAO
+    animeFavoriteDAO = database.animeFavoriteDAO
+    animeReminderDAO = database.animeReminderDAO
     animeService = AnimeService.getInstance()
   }
 
-  fun getAnimeDao(): AnimeDAO {
-    return animeDAO
+  fun getAnimeDetail(): AnimeDetailDAO {
+    return animeDetailDAO
+  }
+
+  fun getAnimeOverviewItem(): AnimeOverviewItemDAO {
+    return animeOverviewItemDAO
+  }
+
+  fun getAnimeFavorite(): AnimeFavoriteDAO {
+    return animeFavoriteDAO
+  }
+
+  fun getAnimeReminder(): AnimeReminderDAO {
+    return animeReminderDAO
   }
 
   fun getAnimeService(): AnimeService {
